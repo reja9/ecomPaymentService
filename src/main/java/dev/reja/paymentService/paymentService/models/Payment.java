@@ -20,6 +20,7 @@ public class Payment extends BaseModel {
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
+    private String refDesc;
     @ManyToOne
     private Currency currency;
 }
