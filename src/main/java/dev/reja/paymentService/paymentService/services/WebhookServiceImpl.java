@@ -1,5 +1,6 @@
 package dev.reja.paymentService.paymentService.services;
 
+import dev.reja.paymentService.paymentService.components.OrderComponent;
 import dev.reja.paymentService.paymentService.exceptions.PymentNotFoundException;
 import dev.reja.paymentService.paymentService.models.Payment;
 import dev.reja.paymentService.paymentService.models.PaymentStatus;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 public class WebhookServiceImpl implements WebhookService {
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    private OrderComponent orderComponent;
     @Override
     public String getOrderSuccess(String response) {
         log.info("request is "+response);
@@ -29,6 +32,8 @@ public class WebhookServiceImpl implements WebhookService {
         );
         if(status.equals("captured")){
             payment.setPaymentStatus(PaymentStatus.SUCCESS);
+
+            orderComponent.updateOrder(payment.getOrderId());
             payment=paymentRepository.save(payment);
         }
         log.info(status);
